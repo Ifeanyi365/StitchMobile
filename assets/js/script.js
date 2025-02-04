@@ -14,7 +14,8 @@ window.addEventListener('scroll', function() {
 	}
 })
 
-
+let phoneNumber = "2349046406277"; // Replace with dynamic number from database
+  document.getElementById("whatsappLink").href = "https://wa.me/" + phoneNumber;
 
 
 
