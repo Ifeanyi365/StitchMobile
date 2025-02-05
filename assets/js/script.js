@@ -14,8 +14,6 @@ window.addEventListener('scroll', function() {
 	}
 })
 
-let phoneNumber = "2349046406277"; // Replace with dynamic number from database
-  document.getElementById("whatsappLink").href = "https://wa.me/" + phoneNumber;
 
 
 
@@ -305,6 +303,7 @@ Vue.createApp({
 			localStorage.setItem("measurements" + customerId, JSON.stringify(this.activeMeasure));
 		},
 		
+		
 
 
 		addMeasure(customerId) {
@@ -325,6 +324,7 @@ Vue.createApp({
 			}
 		},
 
+		
 
 		deleteCustomer(rand) {
 			const allCustomers = JSON.parse(localStorage.getItem("customers"))
@@ -340,6 +340,13 @@ Vue.createApp({
 			this.showHomeBtn = false
 		},
 
+		deleteCustomer(id) {
+			this.customers = this.customers.filter(customer => customer.random !== id);
+			localStorage.setItem('customers', JSON.stringify(this.customers)); // Save the updated list
+			this.showDeleteDialogue = false;
+		  },
+		  
+
 
 		goHome() {
 			this.showEdit = false
@@ -352,33 +359,7 @@ Vue.createApp({
 		},
 
 
-		// search() {
-		// 	this.showCustomerList = true
-		// 	this.showEdit = false
-		// 	this.showHomeBtn = false
-
-		// 	let val = $('#sch').val().toLowerCase()
-
-		// 	if (val.length > 0) {
-		//       //iterate through all <customer list> elements
-		//       $(".list").each(function (i) {
-		//         //get contents of <customer list> and then lowerCase string to compare with lowerCase(d) search input
-		//         if ($(this).find('.name').html().toLowerCase().startsWith(val)) {
-		//           //if the contents of the current <customer list> matches with input value, get the id
-		//           let id = $(this).attr("id")
-		//           //then scroll to the <customer list> element
-		//           let list = document.querySelector("#" + id)
-		//           body.scrollTop = list.offsetTop + 65
-
-		//           //sart from scroll position to another matched list
-		//           return false;
-		//         }
-		//       });
-		//     } else {
-		//     	//if input becomes empty scroll top
-		//     	body.scrollTop = 0;
-		//     }
-		// },
+		
 
 
 		search() {
@@ -446,8 +427,14 @@ Vue.createApp({
 				this.customer.push(element)
 			})
 		}
+		
+		let phoneNumber = "2349046406277"; // Replace with dynamic number from database
+		
+        document.getElementById("whatsappLink").href = "https://wa.me/" + phoneNumber;
+		
 
 	}
+	
        
 
 }).mount("#app")
