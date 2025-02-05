@@ -15,6 +15,8 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/fontawesome.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/animate.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 </head>
 
 <body id="app">
@@ -98,7 +100,14 @@
 								<div class="date">{{ editInfo.date }}</div>
 								<div class="date">{{ editInfo.gender }} - <a :href="'tel: '+editInfo.phone+''"
 										class="snd1"><i class="fa fa-phone"></i> {{ editInfo.phone }}</a>
-									<a href="https://wa.me/2349046406277">WhatsApp</a>
+									
+									<br>
+									<br>
+
+									<a href="https://wa.me/2349046406277" target="_blank">
+										<i class="fa-brands fa-whatsapp" style="font-size: 30px; color: green;"></i>
+									</a>
+									
 
 
 								</div>
@@ -209,23 +218,26 @@
 		</transition>
 
 
-		<!--Modal Dialogue for delete customers-->
-		<transition enter-active-class="animate__animated animate__fadeIn animate__faster"
-			leave-active-class="animate__animated animate__fadeOut animate__faster">
-			<div class="backdrop" v-show="showDeleteDialogue">
-				<transition enter-active-class="animate__animated animate__zoomIn animate__faster"
-					leave-active-class="animate__animated animate__zoomOut animate__faster">
-					<div class="modal-dialogue shad delete" v-show="showDeleteDialogue">
-						<p>This action cannot be undone. Delete this customer?</p>
-
-						<div class="">
-							<button class="btn btnDel shad p snd2" @click="deleteCustomer(editInfo.random)">Yes</button>
-							<div class="btn btnTr shad p snd2" @click="showDeleteDialogue = false">Cancel</div>
-						</div>
+		<transition
+		enter-active-class="animate__animated animate__fadeIn animate__faster"
+		leave-active-class="animate__animated animate__fadeOut animate__faster"
+	>		
+		<div class="backdrop" v-show="showDeleteDialogue">
+			<transition
+				enter-active-class="animate__animated animate__zoomIn animate__faster"
+				leave-active-class="animate__animated animate__zoomOut animate__faster"
+			>
+				<div class="modal-dialogue shad delete" v-show="showDeleteDialogue">
+					<p>You Sure to Delete?</p>
+					
+					<div class="">
+						<button class="btn btnDel shad p snd2" @click="deleteCustomer(editInfo.random)">Yes</button> 
+						<div class="btn btnTr shad p snd2" @click="showDeleteDialogue = false">Cancel</div>
 					</div>
-				</transition>
-			</div>
-		</transition>
+				</div>
+			</transition>
+		</div>
+	</transition>
 
 
 		<!--Modal Dialogue for app info-->
