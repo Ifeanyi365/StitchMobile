@@ -293,19 +293,7 @@ Vue.createApp({
 		},
 
 
-		theme() {
-			if (body.classList.value == "" || body.classList.value == "light" || body.classList.value == "null") {
-				body.className = ''
-				localStorage.setItem("theme", "Light")
-				body.classList.add("dark")
-			}
-			
-			else if (body.classList.value == "dark") {
-				body.className = ''
-				localStorage.setItem("theme", "dark")
-				body.classList.add("dark")
-			}
-		}
+		
 	},
 
 
