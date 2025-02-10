@@ -14,9 +14,6 @@ window.addEventListener('scroll', function() {
 	}
 })
 
-
-
-
 //handle click sounds
 let snd1 = new Audio("assets/sound/s1.mp3")
 let snd2 = new Audio("assets/sound/s2.mp3")
@@ -48,16 +45,13 @@ $(document).ready(function() {
 		$('#all').show(0)
 	}, to)
 
-// Restrict unwanted values in inputs
-$('body').on("keyup", "input", function() {
-    let type = $(this).attr('char-type');
+	//restrict unwanted values in inputs
+	$('body').on("keyup", "input", function(){
+		let type = $(this).attr('char-type')
 
-    if (type == 'numeric') {
-        var reg = /[^0-9+]/g; // Allow only numbers (0-9) and plus (+) sign
-        $(this).val($(this).val().replace(reg, '')); // Replace unwanted characters
-    }
-
-
+		if (type == 'numeric') {
+			var reg = /[^0-9.]/g
+		}
 		else if (type == 'alpha') {
 			var reg = /[^A-Za-z ]/g
 		}
@@ -65,22 +59,6 @@ $('body').on("keyup", "input", function() {
 		$(this).val($(this).val().replaceAll(reg, ''))
 	})
 })
-
-// Restrict unwanted values in inputs
-$('body').on("keyup", "input", function() {
-    let type = $(this).attr('char-type');
-
-    if (type === 'numeric') {
-        var reg = /[^0-9+]/g; // Allow only numbers and the "+" sign
-        $(this).val($(this).val().replace(reg, '')); 
-    } 
-    else if (type === 'alpha') {
-        var reg = /[^a-zA-Z\s]/g; // Allow only letters and spaces
-        $(this).val($(this).val().replace(reg, ''));
-    }
-});
-
-
 
 //if app has been viewed for the first time
 localStorage.setItem("isViewed", "1")
@@ -90,23 +68,6 @@ console.log = () => {}
 console.warn = () => {}
 
 Vue.createApp({
-//  added new
-	methods: {
-		uploadPhoto(event) {
-			const file = event.target.files[0]; // Get the uploaded file
-			if (file) {
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					this.editInfo.photo = e.target.result; // Preview the image
-				};
-				reader.readAsDataURL(file); // Convert image to Base64
-			}
-		}
-		
-
-		
-	},
-	
 	data() {
 		return {
 			showAddDialogue: false,
@@ -129,19 +90,15 @@ Vue.createApp({
 
 			customer: [],
 
-			editInfo: {
+			editInfo: [{
 				name: '',
 				phone: '',
 				gender: '',
 				id: null,
 				date: '',
 				color: null,
-				random: null,
-				photo: '' // <-- Add this property
-			},
-
-			
-			
+				random: null
+			}],
 
 			searchVal: '',
 
@@ -149,13 +106,7 @@ Vue.createApp({
 
 			addMeasureInput: ''
 		}
-
-		
 	},
-
-	
-
-	
 
 
 	methods: {
@@ -229,81 +180,35 @@ Vue.createApp({
 			}
 		},
 
-		edit(id, name, phone, gender, date, time, color, random) {
-			this.showCustomerList = false;
-			this.showEdit = true;
-		
-			let storedCustomers = JSON.parse(localStorage.getItem("customers")) || [];
-			let selectedCustomer = storedCustomers.find(c => c.random === random);
-		
-			// Set the customer info
-			this.editInfo = {
-				name,
-				phone,
-				gender,
-				date,
-				time,
-				color,
-				random,
-				
-				photo: selectedCustomer?.photo ? `${selectedCustomer.photo}` : ''
 
-			};
-		
-			// Load customer measurement data
-			this.activeMeasure = JSON.parse(localStorage.getItem("measurements" + random)) || [];
-		
-			this.showHomeBtn = true;
-			this.scrollPosition = body.scrollTop;
-			body.scrollTop = 0;
+		edit(id,name,phone,gender,date,time,color,random) {
+			this.showCustomerList = false
+			this.showEdit = true
+
+			//set the customer info
+			this.editInfo.name = name
+			this.editInfo.phone = phone
+			this.editInfo.gender = gender
+			this.editInfo.date = date
+			this.editInfo.time = time
+			this.editInfo.color = color
+			this.editInfo.random = random
+
+			//set the customer measurement data
+			let storedMeasure = JSON.parse(localStorage.getItem("measurements"+random))
+			this.activeMeasure = storedMeasure
+
+			this.showHomeBtn = true
+			this.scrollPosition = body.scrollTop
+			body.scrollTop = 0
 		},
-		
 
-		// edit(id,name,phone,gender,date,time,color,random) {
-		// 	this.showCustomerList = false
-		// 	this.showEdit = true
-
-		// 	//set the customer info
-		// 	this.editInfo.name = name
-		// 	this.editInfo.phone = phone
-		// 	this.editInfo.gender = gender
-		// 	this.editInfo.date = date
-		// 	this.editInfo.time = time
-		// 	this.editInfo.color = color
-		// 	this.editInfo.random = random
-
-		// 	//set the customer measurement data
-		// 	let storedMeasure = JSON.parse(localStorage.getItem("measurements"+random))
-		// 	this.activeMeasure = storedMeasure
-
-		// 	this.showHomeBtn = true
-		// 	this.scrollPosition = body.scrollTop
-		// 	body.scrollTop = 0
-		// },
-
-
-		// saveMeasure(customerId) {
-		// 	this.showAlert = true
-		// 	setTimeout(() => this.showAlert = false, 5000)
-		// 	localStorage.setItem("measurements"+customerId, JSON.stringify(this.activeMeasure))
-		// },
 
 		saveMeasure(customerId) {
-			this.showAlert = true;
-			setTimeout(() => (this.showAlert = false), 5000);
-		
-			let storedCustomers = JSON.parse(localStorage.getItem("customers")) || [];
-			let index = storedCustomers.findIndex(c => c.random === customerId);
-			
-			if (index !== -1) {
-				storedCustomers[index].photo = this.editInfo.photo; // Save the photo
-				localStorage.setItem("customers", JSON.stringify(storedCustomers));
-			}
-		
-			localStorage.setItem("measurements" + customerId, JSON.stringify(this.activeMeasure));
+			this.showAlert = true
+			setTimeout(() => this.showAlert = false, 5000)
+			localStorage.setItem("measurements"+customerId, JSON.stringify(this.activeMeasure))
 		},
-		
-		
 
 
 		addMeasure(customerId) {
@@ -324,7 +229,6 @@ Vue.createApp({
 			}
 		},
 
-		
 
 		deleteCustomer(rand) {
 			const allCustomers = JSON.parse(localStorage.getItem("customers"))
@@ -336,16 +240,9 @@ Vue.createApp({
 
 			setTimeout(() => this.showCustomerList = true, 200)
 			this.showDeleteDialogue = false
-			this.showEdit = true
+			this.showEdit = false
 			this.showHomeBtn = false
 		},
-
-		deleteCustomer(id) {
-			this.customers = this.customers.filter(customer => customer.random !== id);
-			localStorage.setItem('customers', JSON.stringify(this.customers)); // Save the updated list
-			this.showDeleteDialogue = false;
-		  },
-		  
 
 
 		goHome() {
@@ -358,42 +255,37 @@ Vue.createApp({
 			}, 300)
 		},
 
-
-		
-
-
 		search() {
-			this.showCustomerList = true;
-			this.showEdit = false;
-			this.showHomeBtn = false;
-		
-			let val = $('#sch').val().toLowerCase();
-		
-			if (val.length > 0) {
-				// Hide all customer lists first
-				$(".list").hide();
-		
-				let found = false;
-				$(".list").each(function () {
-					// Check if the customer's name starts with the search input
-					if ($(this).find('.name').html().toLowerCase().startsWith(val)) {
-						$(this).show(); // Show only matching names
-						if (!found) {
-							let id = $(this).attr("id");
-							let list = document.querySelector("#" + id);
-							body.scrollTop = list.offsetTop + 65;
-							found = true;
-						}
-					}
-				});
-			} else {
-				// If input is empty, show all names again and scroll to the top
-				$(".list").show();
-				body.scrollTop = 0;
-			}
-		},
-		
-
+            this.showCustomerList = true;
+            this.showEdit = false;
+            this.showHomeBtn = false;
+        
+            let val = $('#sch').val().toLowerCase();
+        
+            if (val.length > 0) {
+                // Hide all customer lists first
+                $(".list").hide();
+        
+                let found = false;
+                $(".list").each(function () {
+                    // Check if the customer's name starts with the search input
+                    if ($(this).find('.name').html().toLowerCase().startsWith(val)) {
+                        $(this).show(); // Show only matching names
+                        if (!found) {
+                            let id = $(this).attr("id");
+                            let list = document.querySelector("#" + id);
+                            body.scrollTop = list.offsetTop + 65;
+                            found = true;
+                        }
+                    }
+                });
+            } else {
+                // If input is empty, show all names again and scroll to the top
+                $(".list").show();
+                body.scrollTop = 0;
+            }
+        },
+        
 
 		hideInfo() {
 			this.showInfoDialogue = false
@@ -404,18 +296,17 @@ Vue.createApp({
 		theme() {
 			if (body.classList.value == "" || body.classList.value == "light" || body.classList.value == "null") {
 				body.className = ''
-				localStorage.setItem("theme", "dark")
+				localStorage.setItem("theme", "Light")
 				body.classList.add("dark")
 			}
 			
 			else if (body.classList.value == "dark") {
 				body.className = ''
-				localStorage.setItem("theme", "light")
-				body.classList.add("light")
+				localStorage.setItem("theme", "dark")
+				body.classList.add("dark")
 			}
 		}
 	},
-	
 
 
 	mounted() {
@@ -427,15 +318,6 @@ Vue.createApp({
 				this.customer.push(element)
 			})
 		}
-		
-		let phoneNumber = "2349046406277"; // Replace with dynamic number from database
-		
-        document.getElementById("whatsappLink").href = "https://wa.me/" + phoneNumber;
-		
 
 	}
-	
-       
-
 }).mount("#app")
-
